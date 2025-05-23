@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="eng">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- Google tag (gtag.js)
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WV9DNL0BT4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -9,7 +10,8 @@
   gtag('js', new Date());
 
   gtag('config', 'G-WV9DNL0BT4');
-</script>
+</script> -->
+
     <meta charset="UTF-8" />
     <title>Calculator</title>
     <link rel="stylesheet" href="style.css">
@@ -55,6 +57,46 @@
     </div>
 </div>    
 
-    
+<p id="userCount">Loading user count...</p>
+
+
+    <!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC-2uhbzC_ODnGp-hEAj1390t8YXjYqQUE",
+    authDomain: "calculator-usage.firebaseapp.com",
+    databaseURL: "https://calculator-usage-default-rtdb.firebaseio.com",
+    projectId: "calculator-usage",
+    storageBucket: "calculator-usage.appspot.com",
+    messagingSenderId: "844360451441",
+    appId: "1:844360451441:web:0f96dc88bb3b901206a2d0"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+
+<script>
+  const userId = localStorage.getItem("user_id") || crypto.randomUUID();
+  localStorage.setItem("user_id", userId);
+
+  // Log user in Firebase if not already logged
+  db.ref("users/" + userId).set({
+    joinedAt: new Date().toISOString()
+  });
+
+  // Get total user count and display on page
+  db.ref("users").once("value", snapshot => {
+    const count = snapshot.numChildren();
+    document.getElementById("userCount").textContent = 
+      `This calculator has ${count} users.`;
+  });
+</script>
+
+
 </body>
 </html>
